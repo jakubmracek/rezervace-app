@@ -1,3 +1,4 @@
+import AddSlotForm from './AddSlotForm'
 import { createSupabaseServerClient, createSupabaseAdmin } from '@/lib/supabase-server'
 import { Event, Slot, Reservation, EventField } from '@/lib/types'
 import Link from 'next/link'
