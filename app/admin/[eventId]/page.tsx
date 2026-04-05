@@ -102,6 +102,7 @@ export default async function EventDetailPage({ params }: { params: { eventId: s
             )
           })}
         </div>
+      <AddSlotForm eventId={event.id} />
       </section>
 
       {/* Rezervace */}
