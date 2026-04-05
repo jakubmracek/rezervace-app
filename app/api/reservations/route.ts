@@ -48,6 +48,41 @@ export async function POST(req: NextRequest) {
     } catch (emailErr) {
       // E-mail selhal – rezervace je ale platná, neblokujeme
       console.error('Email send failed:', emailErr)
+
+
+      if (emailField) {
+    try {
+      const { data: event } = await admin
+        .from('events')
+        .select('*')
+        .eq('id', event_id)
+        .single()
+
+      const { data: slot } = await admin
+        .from('slots')
+        .select('*')
+        .eq('id', slot_id)
+        .single()
+
+      console.log('Sending email to:', emailField)
+      console.log('Event:', event?.name)
+      console.log('Slot:', slot?.label)
+
+      if (event && slot) {
+        await sendConfirmationEmail({
+          event,
+          slot,
+          recipientEmail: emailField,
+          recipientName: data.name ?? data.jmeno,
+        })
+        console.log('Email sent OK')
+      } else {
+        console.log('Missing event or slot data')
+      }
+    } catch (emailErr) {
+      console.error('Email send failed:', emailErr)
+    }
+  }
     }
   }
 
