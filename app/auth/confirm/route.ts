@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as any
   const code = searchParams.get('code')
-  const next = '/admin'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
 
   const cookieStore = await cookies()
   const supabase = createServerClient(
@@ -25,21 +25,15 @@ export async function GET(request: NextRequest) {
     }
   )
 
-  // Zkus token_hash (starší formát)
   if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({ type, token_hash })
-    if (!error) {
-      return NextResponse.redirect(new URL(next, request.url))
-    }
+    if (!error) return NextResponse.redirect(`${appUrl}/admin`)
   }
 
-  // Zkus code (novější PKCE formát)
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      return NextResponse.redirect(new URL(next, request.url))
-    }
+    if (!error) return NextResponse.redirect(`${appUrl}/admin`)
   }
 
-  return NextResponse.redirect(new URL('/admin/login?error=invalid_link', request.url))
+  return NextResponse.redirect(`${appUrl}/admin/login?error=invalid_link`)
 }
