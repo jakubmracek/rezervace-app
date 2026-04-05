@@ -1,8 +1,5 @@
-import { Resend } from 'resend'
 import { Event, Slot } from './types'
 import { generateUserICS } from './ics'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendConfirmationEmail({
   event,
@@ -15,6 +12,9 @@ export async function sendConfirmationEmail({
   recipientEmail: string
   recipientName?: string
 }) {
+  const { Resend } = await import('resend')
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   const icsContent = generateUserICS(event, slot)
 
   const html = `
