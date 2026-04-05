@@ -1,3 +1,4 @@
+import EditEventForm from './EditEventForm'
 import AddSlotForm from './AddSlotForm'
 import { createSupabaseServerClient, createSupabaseAdmin } from '@/lib/supabase-server'
 import { Event, Slot, Reservation, EventField } from '@/lib/types'
@@ -44,6 +45,11 @@ export default async function EventDetailPage({ params }: { params: { eventId: s
           ← Zpět
         </Link>
         <h1 className="text-2xl font-bold">{event.name}</h1>
+        <EditEventForm
+          eventId={event.id}
+          initialName={event.name}
+          initialDescription={event.description}
+        />
         <span className={`text-xs px-2 py-1 rounded-full ${
           event.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
         }`}>
