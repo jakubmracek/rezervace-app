@@ -7,7 +7,9 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as any
   const code = searchParams.get('code')
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
+
+  const rawUrl = process.env.NEXT_PUBLIC_APP_URL!
+  const appUrl = rawUrl.startsWith('http') ? rawUrl.replace(/\/$/, '') : `https://${rawUrl.replace(/\/$/, '')}`
 
   const cookieStore = await cookies()
   const supabase = createServerClient(
